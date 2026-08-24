@@ -24,7 +24,7 @@
                       "pm.test(\"Content-Type is present\", function () {",
                       "    pm.response.to.have.header(\"Content-Type\");",
                       "});",
-                      "pm.collectionVariables.set(\"authToken\", jsonData.token);",
+                      "pm.environment.set(\"authToken\", jsonData.token);",
                       "",
                       "pm.test(\"Status code is 200\", function () {",
                       "    pm.response.to.have.status(200);",
@@ -1010,6 +1010,9 @@
                       "    idList = idList ? JSON.parse(idList) : []; \r",
                       "    idList.push(newId);\r",
                       "    pm.collectionVariables.set(\"AllDieticianIds\", JSON.stringify(idList));\r",
+                      "    \r",
+                      "pm.environment.set(\"AllDieticianIds\", JSON.stringify(idList));\r",
+                      "pm.environment.set(\"dieticianId\", newId);   // last one\r",
                       "\r",
                       "  \r",
                       "\r",
@@ -1079,7 +1082,7 @@
                       "    });    \r",
                       "    pm.expect(response).to.have.property('token'); \r",
                       "    var token = response.token; \r",
-                      "    pm.collectionVariables.set(\"dieticianToken\", token);\r",
+                      "    pm.environment.set(\"dieticianToken\", token);\r",
                       "    console.log(\"Token value\", token);   \r",
                       "\r",
                       "} else if (pm.response.code === 401) {\r",
@@ -4526,6 +4529,64 @@
               "response": []
             },
             {
+              "name": "Update Dietician Details with Admin Token and invalid Education",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "//1. Validate response code\r",
+                      "pm.test(\"Status code is 400 Bad Request Mandatory Dietician Education should be letters and may contain numbers or symbols\", () => {\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "});\r",
+                      "\r",
+                      "//2. Verify response body type\r",
+                      "pm.test(\"Response body is JSON\", function(){\r",
+                      "pm.response.to.be.json;});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"ContactNumber\": \"{{dieticianContactNumber}}\",\r\n  \"DateOfBirth\": \"{{dieticianDateOfBirth}}\",\r\n  \"Education\": \"23435\",\r\n  \"Email\": \"{{dieticianEmail}}\",\r\n  \"Firstname\": \"{{dieticianFirstname}}\",\r\n  \"HospitalCity\": \"{{dieticianHospitalCity}}\",\r\n  \"HospitalName\": \"{{dieticianHospitalName}}\",\r\n  \"HospitalPincode\": \"234567\",\r\n  \"HospitalStreet\": \"{{dieticianHospitalStreet}}\",\r\n  \"Lastname\": \"{{dieticianLastname}}\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{Baseurl}}/dietician/{{dieticianId}}",
+                  "host": [
+                    "{{Baseurl}}"
+                  ],
+                  "path": [
+                    "dietician",
+                    "{{dieticianId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
               "name": "Update a dietician with valid data using an invalid endpoint",
               "event": [
                 {
@@ -4851,7 +4912,7 @@
                           "\r",
                           "    if (response.patientId) {\r",
                           "           \r",
-                          "        pm.collectionVariables.set(\"patientId\", response.patientId);  // Current patient ID\r",
+                          "        pm.environment.set(\"patientId\", response.patientId);  // Current patient ID\r",
                           "\r",
                           "        \r",
                           "        if (response.Email) {\r",
