@@ -1,2 +1,2 @@
-UserLoginEmail,UserLoginPassword
-augHackathon@gmail.com,test
+UserLoginEmail,UserLoginPassword,InvalidUserEmail,InvalidUserPassword,Userinvalidemailformat,InvalidSpecuserpassword
+augHackathon@gmail.com,test,jj,1,augH,t@est
