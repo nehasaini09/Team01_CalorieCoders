@@ -94,7 +94,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"userLoginEmail\": \"augHackathon@gmail.com\",\r\n  \"password\": \"test\"\r\n}",
+                  "raw": "{\r\n  \"userLoginEmail\": \"{{userLoginEmail}}\",\r\n  \"password\": \"{{password}}\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -5294,7 +5294,7 @@
                           "\r",
                           "    if (response.patientId) {\r",
                           "           \r",
-                          "        pm.environment.set(\"patientId\", response.patientId);  // Current patient ID\r",
+                          "       pm.collectionVariables.set(\"patientId\", response.patientId);  // Current patient ID\r",
                           "\r",
                           "        \r",
                           "        if (response.Email) {\r",
@@ -5315,7 +5315,7 @@
                           "            );\r",
                           "        }\r",
                           "\r",
-                          "        //all patient IDs\r",
+                          "        //collecting all pat IDs\r",
                           "        let patientIds = [];\r",
                           "\r",
                           "        const existingIds =\r",
@@ -5409,13 +5409,20 @@
                           "    pm.response.to.have.status(200);",
                           "});",
                           "",
-                          "///if (response.Email) {",
+                          "",
                           "    ",
                           ""
                         ],
                         "type": "text/javascript",
                         "packages": {},
                         "requests": {}
+                      }
+                    },
+                    {
+                      "listen": "prerequest",
+                      "script": {
+                        "packages": {},
+                        "type": "text/javascript"
                       }
                     }
                   ],
